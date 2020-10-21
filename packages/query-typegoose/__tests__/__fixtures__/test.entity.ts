@@ -1,14 +1,14 @@
-import { mongoose, prop, Ref } from '@typegoose/typegoose';
+import { Ref, mongoose, prop } from '@typegoose/typegoose';
 import { TestReference } from './test-reference.entity';
 
 export class TestEntity {
-  get id(): string {
-    const idKey = '_id';
-    return ((this as unknown) as Record<string, mongoose.Types.ObjectId>)[idKey]?.toString();
-  }
+  _id: mongoose.Types.ObjectId;
 
   @prop({ required: true })
   stringType!: string;
+
+  @prop({ required: true })
+  referenceName!: string;
 
   @prop({ required: true })
   boolType!: boolean;
@@ -19,25 +19,9 @@ export class TestEntity {
   @prop({ required: true })
   dateType!: Date;
 
-  @prop({ ref: TestReference })
+  @prop()
   testReference?: Ref<TestReference>;
 
-  @prop({ ref: TestReference })
-  testReferences?: Ref<TestReference>[];
-
-  getInputData(): Partial<TestEntity> {
-    return {
-      stringType: this.stringType,
-      boolType: this.boolType,
-      numberType: this.numberType,
-      dateType: this.dateType,
-    };
-  }
-
-  getOutputData(): TestEntity {
-    return {
-      ...this,
-      id: this.id,
-    };
-  }
+  @prop()
+  testReferences?: Ref<TestReference>;
 }

@@ -1,18 +1,15 @@
-import { mongoose, prop } from '@typegoose/typegoose';
+import { mongoose, prop, Ref } from '@typegoose/typegoose';
+import { TestEntity } from './test.entity';
 
 export class TestReference {
-  get id(): string {
-    const idKey = '_id';
-    return ((this as unknown) as Record<string, mongoose.Types.ObjectId>)[idKey]?.toString();
-  }
+  _id: mongoose.Types.ObjectId;
 
   @prop({ required: true })
   name!: string;
 
-  getOutputData(): TestReference {
-    return {
-      ...this,
-      id: this.id,
-    };
-  }
+  @prop({ required: true })
+  referenceName!: string;
+
+  @prop()
+  testEntity?: Ref<TestEntity>;
 }
